@@ -6,15 +6,15 @@
     <copyright>Copyright (C) 2009-2011 Christopher Mavros. All rights reserved.</copyright>
     <license>GNU General Public License</license>
     <authorEmail>mavrosxristoforos@gmail.com</authorEmail>
-    <authorUrl>https://mavrosxristoforos.com/</authorUrl>
-<version>1.4.40</version>
+    <authorUrl>https://mavxr.com/</authorUrl>
+<version>1.4.41</version>
     <description>Rapid Contact. Lightweight, fast and easy, configuring a contact form, was never a pleasure before.</description>
     <files>
         <filename module="mod_rapid_contact">mod_rapid_contact.php</filename>
         <folder>tmpl</folder>
     </files>
    <updateservers>
-      <server type="extension" priority="1" name="Rapid Contact Updates">https://mavrosxristoforos.com/index.php?option=com_extensionupdater&amp;extension=rapid_contact</server>
+      <server type="extension" priority="1" name="Rapid Contact Updates">https://mavxr.com/index.php?option=com_extensionupdater&amp;extension=rapid_contact</server>
    </updateservers>
     <config><fields name="params">
       <fieldset name="basic">
@@ -49,7 +49,7 @@
         <field name="addcss" type="text" default="" label="Custom CSS" description="Custom CSS for the form." />
       </fieldset>
       <fieldset name="customfields" label="Custom Fields">
-        <field name="rpxadd" type="spacer" class="text" label="&lt;h2&gt;Extend your form capabilities&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://mavrosxristoforos.com/images/rpx_ad.png&quot; alt=&quot;Rapid Contact Ex&quot; align=&quot;right&quot; style=&quot;width:504px;max-width:100%;&quot;/&gt;&lt;a href=&quot;https://mavrosxristoforos.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Rapid Contact Ex&lt;/a&gt; is a fully customizable Contact Form generator which allows you to create any form you may require, from very simple contact forms, to complex business contact forms with multiple email recipients, or even file-upload forms, without writing one line of code.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Unlimited Fields&lt;/li&gt;&lt;li&gt;Multiple Email Recipients&lt;/li&gt;&lt;li&gt;Multiple Forms per Site&lt;/li&gt;&lt;li&gt;Back-end Field Manager&lt;/li&gt;&lt;li&gt;Various Field types: (Text, Textarea, Email, Telephone, Postal Code, File Upload, DropDowns, Checkboxes, Hidden, Email Groups)&lt;/li&gt;&lt;li&gt;Custom HTML or text between fields to customize your form, completely!&lt;/li&gt;&lt;li&gt;Unlimited Websites License&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Above all that, Rapid Contact Ex is &lt;strong&gt;one of the cheapest (if not the cheapest) professional contact form generator&lt;/strong&gt;, while it includes all the fancy features you want to create a contact form for your site. With a 30-day money-back guarantee, why not choose it to create your forms?&lt;/p&gt;&lt;br/&gt;&lt;a href=&quot;https://mavrosxristoforos.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Learn more!&lt;/a&gt;"/>
+        <field name="rpxadd" type="spacer" class="text" label="&lt;h2&gt;Extend your form capabilities&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://mavxr.com/images/rpx_ad.png&quot; alt=&quot;Rapid Contact Ex&quot; align=&quot;right&quot; style=&quot;width:504px;max-width:100%;&quot;/&gt;&lt;a href=&quot;https://mavxr.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Rapid Contact Ex&lt;/a&gt; is a fully customizable Contact Form generator which allows you to create any form you may require, from very simple contact forms, to complex business contact forms with multiple email recipients, or even file-upload forms, without writing one line of code.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Unlimited Fields&lt;/li&gt;&lt;li&gt;Multiple Email Recipients&lt;/li&gt;&lt;li&gt;Multiple Forms per Site&lt;/li&gt;&lt;li&gt;Back-end Field Manager&lt;/li&gt;&lt;li&gt;Various Field types: (Text, Textarea, Email, Telephone, Postal Code, File Upload, DropDowns, Checkboxes, Hidden, Email Groups)&lt;/li&gt;&lt;li&gt;Custom HTML or text between fields to customize your form, completely!&lt;/li&gt;&lt;li&gt;Unlimited Websites License&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Above all that, Rapid Contact Ex is &lt;strong&gt;one of the cheapest (if not the cheapest) professional contact form generator&lt;/strong&gt;, while it includes all the fancy features you want to create a contact form for your site. With a 30-day money-back guarantee, why not choose it to create your forms?&lt;/p&gt;&lt;br/&gt;&lt;a href=&quot;https://mavxr.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Learn more!&lt;/a&gt;"/>
       </fieldset>
       <fieldset name="antispam" label="Anti-Spam Options">
         <field name="enable_anti_spam" type="radio" default="1" label="Anti-spam" class="btn-group" description="Enable this to use the anti-spam question for anti-spam control">
