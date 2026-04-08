@@ -77,10 +77,10 @@ if ($input->exists('rp_email')) {
 
     $mailSender->setSender(array($from_email, $params->get('from_name', 'Rapid Contact')));
     if(version_compare(JVERSION, '3.5', 'ge')) {
-      $mailSender->addReplyTo($posted_email, $params->get('from_name', 'Rapid Contact'));
+      $mailSender->addReplyTo($posted_email, $posted_email);
     }
     else {
-      $mailSender->addReplyTo(array( $posted_email, $params->get('from_name', 'Rapid Contact') ));
+      $mailSender->addReplyTo(array($posted_email, $posted_email));
     }
 
     $mailSender->setSubject($input->get('rp_subject', '', 'string'));
