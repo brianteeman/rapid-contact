@@ -13,6 +13,6 @@
 \defined( '_JEXEC' ) or die( 'Restricted access' );
 
 ?>
-<div class="input-group">
+<div class="control-group">
   <input class="rapid_contact button <?php print $params->get('button_class', 'btn btn-primary'); ?>" type="submit" value="<?php print $params->get('button_text', 'Send Message'); ?>"/>
 </div>

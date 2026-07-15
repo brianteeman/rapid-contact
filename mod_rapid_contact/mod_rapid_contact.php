@@ -15,13 +15,23 @@
 use \Joomla\CMS\Factory;
 use \Joomla\CMS\Helper\ModuleHelper;
 use \Joomla\CMS\Captcha\Captcha;
+use \Joomla\CMS\Mail\MailHelper;
+use \Joomla\CMS\Session\Session;
+use \Joomla\CMS\Uri\Uri;
+
+$app = Factory::getApplication();
+$input = method_exists($app, 'getInput') ? $app->getInput() : $app->input;
+$session = method_exists($app, 'getSession') ? $app->getSession() : Factory::getSession();
 
 $recipient = $params->get('email_recipient', 'email@email.com');
 $wrongantispamanswer = $params->get('wrong_antispam', 'Wrong anti-spam answer');
+$invalidTokenError = $params->get('invalid_token_error', 'Your session has expired. Please try submitting the form again.');
+$honeypotLabel = $params->get('honeypot_label', 'Leave this field empty');
 $error_text_color = $params->get('error_text_color', '#FF0000');
 $url = $params->get('fixed_url', false) ? 'action="' . $params->get('fixed_url_address', '') . '"' : '';
 
-$input = Factory::getApplication()->input;
+// Each module instance only processes its own submissions.
+$instanceId = (int) $module->id;
 
 $myError = '';
 $CORRECT_ANTISPAM_ANSWER = '';
@@ -30,23 +40,27 @@ $CORRECT_SUBJECT = '';
 $CORRECT_MESSAGE = '';
 $email_class = '';
 
-if ($input->exists('rp_email')) {
-  $CORRECT_SUBJECT = $input->get('rp_subject', '', 'string');
-  $CORRECT_MESSAGE = $input->get('rp_message', '', 'string');
+if ($input->post->exists('rp_email') && $input->post->getInt('rp_instance', 0) === $instanceId) {
+  $CORRECT_SUBJECT = $input->post->get('rp_subject', '', 'string');
+  $CORRECT_MESSAGE = $input->post->get('rp_message', '', 'string');
+  // Cross-Site Request Forgery protection.
+  if (!$input->post->getInt(Session::getFormToken(), 0)) {
+    $myError = '<span style="color: ' . $error_text_color . ';">' . $invalidTokenError . '</span>';
+  }
   // check anti-spam
   if ($params->get('enable_anti_spam', '1') == '1') {
-    if (strtolower($input->get('rp_anti_spam_answer', '', 'string')) != strtolower($params->get('anti_spam_a', '2'))) {
+    if (strtolower($input->post->get('rp_anti_spam_answer', '', 'string')) != strtolower((string) $params->get('anti_spam_a', '2'))) {
       $myError = '<span style="color: ' . $error_text_color . ';">' . $wrongantispamanswer . '</span>';
     }
     else {
-      $CORRECT_ANTISPAM_ANSWER = $input->get('rp_anti_spam_answer', '', 'string');
+      $CORRECT_ANTISPAM_ANSWER = $input->post->get('rp_anti_spam_answer', '', 'string');
     }
   }
   else if ($params->get('enable_anti_spam', '1') == '2') {
-    if (Factory::getConfig()->get('captcha') != '0') {
-      $captcha = Captcha::getInstance(Factory::getConfig()->get('captcha'));
+    if ($app->get('captcha') != '0') {
+      $captcha = Captcha::getInstance($app->get('captcha'));
       try {
-        if (!$captcha->checkAnswer(Factory::getApplication()->input->get('rp_recaptcha', null, 'string'))) {
+        if (!$captcha->checkAnswer($input->get('rp_recaptcha', null, 'string'))) {
           $myError = '<span style="color: ' . $error_text_color . ';">' . $wrongantispamanswer . '</span>';
         }
       }
@@ -55,13 +69,21 @@ if ($input->exists('rp_email')) {
       }
     }
   }
+  else if ($params->get('enable_anti_spam', '1') == '3') {
+    // Honeypot: real visitors never see or fill this field.
+    // A filled honeypot is silently discarded, so bots cannot tell they were caught.
+    if ($input->post->get('rp_hp', '', 'string') !== '') {
+      $session->set('rp_thanks', $instanceId);
+      $app->redirect(Uri::getInstance()->toString(), 303);
+    }
+  }
   // check email
-  $posted_email = $input->get('rp_email', '', 'string');
+  $posted_email = $input->post->get('rp_email', '', 'string');
   if ($posted_email === '') {
     $myError = '<span style="color: ' . $error_text_color . ';">' . $params->get('no_email', 'Please write your email') . '</span>';
     $email_class = ' has-error';
   }
-  if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,24})$/", strtolower($posted_email))) {
+  else if (!MailHelper::isEmailAddress($posted_email)) {
     $myError = '<span style="color: ' . $error_text_color . ';">' . $params->get('invalid_email', 'Please write a valid email') . '</span>';
     $email_class = ' has-error';
   }
@@ -73,17 +95,12 @@ if ($input->exists('rp_email')) {
     $mailSender = Factory::getMailer();
     $mailSender->addRecipient($recipient);
 
-    $from_email = ($params->get('from_email', 'rapid_contact@yoursite.com') == 'rapid_contact@yoursite.com') ? Factory::getApplication()->getCfg('mailfrom') : $params->get('from_email', 'rapid_contact@yoursite.com');
+    $from_email = ($params->get('from_email', 'rapid_contact@yoursite.com') == 'rapid_contact@yoursite.com') ? $app->get('mailfrom') : $params->get('from_email', 'rapid_contact@yoursite.com');
 
     $mailSender->setSender(array($from_email, $params->get('from_name', 'Rapid Contact')));
-    if(version_compare(JVERSION, '3.5', 'ge')) {
-      $mailSender->addReplyTo($posted_email, $posted_email);
-    }
-    else {
-      $mailSender->addReplyTo(array($posted_email, $posted_email));
-    }
+    $mailSender->addReplyTo($posted_email, $posted_email);
 
-    $mailSender->setSubject($input->get('rp_subject', '', 'string'));
+    $mailSender->setSubject($CORRECT_SUBJECT);
 
     ob_start();
     require ModuleHelper::getLayoutPath('mod_rapid_contact', 'default_message_body');
@@ -96,8 +113,10 @@ if ($input->exists('rp_email')) {
         return true;
       }
       else {
-        require ModuleHelper::getLayoutPath('mod_rapid_contact', 'default_thank_you');
-        return true;
+        // Post/Redirect/Get: a refresh will not re-send the message.
+        // The thank-you state travels in the session, keeping the URL clean.
+        $session->set('rp_thanks', $instanceId);
+        $app->redirect(Uri::getInstance()->toString(), 303);
       }
     }
     catch(\Throwable $e) {
@@ -107,6 +126,13 @@ if ($input->exists('rp_email')) {
 
   }
 } // end if posted
+
+// Post/Redirect/Get: display the thank-you message after a successful submission.
+if ((int) $session->get('rp_thanks', 0) === $instanceId) {
+  $session->set('rp_thanks', null);
+  require ModuleHelper::getLayoutPath('mod_rapid_contact', 'default_thank_you');
+  return true;
+}
 
 // check recipient
 if ($recipient === "email@email.com") {

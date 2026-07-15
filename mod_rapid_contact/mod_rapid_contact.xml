@@ -7,7 +7,7 @@
     <license>GNU General Public License</license>
     <authorEmail>mavrosxristoforos@gmail.com</authorEmail>
     <authorUrl>https://mavxr.com/</authorUrl>
-<version>1.4.45</version>
+<version>2.0.47</version>
     <description>Rapid Contact. Lightweight, fast and easy, configuring a contact form, was never a pleasure before.</description>
     <files>
         <filename module="mod_rapid_contact">mod_rapid_contact.php</filename>
@@ -33,6 +33,7 @@
         <field name="no_email" type="text" default="Please write your email" label="No Email Error Message" description="The error message when the user does not write an email" />
         <field name="invalid_email" type="text" default="Please write a valid email" label="Invalid Email Error Message" description="The error message when the user writes an invalid email" />
         <field name="wrong_antispam" type="text" default="Wrong Anti-Spam Answer" label="Wrong Anti-Spam Text" description="The text to show when the user fails to pass the anti-spam check"/>
+        <field name="invalid_token_error" type="text" default="Your session has expired. Please try submitting the form again." label="Invalid Token Error Message" description="The error message when the user's session token is invalid." />
         <field name="pre_text" type="text" filter="raw" default="" label="Small Intro Text" description="A small text shown before (above) the message form. HTML is welcome!" />
         <field name="email_pretext" type="text" filter="raw" default="You received a message from " label="Email Pre-Text" description="A small text shown at the beginning of the sent email. HTML is welcome!" />
       </fieldset>
@@ -52,10 +53,11 @@
         <field name="rpxadd" type="spacer" class="text" label="&lt;h2&gt;Extend your form capabilities&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;https://mavxr.com/images/rpx_ad.png&quot; alt=&quot;Rapid Contact Ex&quot; align=&quot;right&quot; style=&quot;width:504px;max-width:100%;&quot;/&gt;&lt;a href=&quot;https://mavxr.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Rapid Contact Ex&lt;/a&gt; is a fully customizable Contact Form generator which allows you to create any form you may require, from very simple contact forms, to complex business contact forms with multiple email recipients, or even file-upload forms, without writing one line of code.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Unlimited Fields&lt;/li&gt;&lt;li&gt;Multiple Email Recipients&lt;/li&gt;&lt;li&gt;Multiple Forms per Site&lt;/li&gt;&lt;li&gt;Back-end Field Manager&lt;/li&gt;&lt;li&gt;Various Field types: (Text, Textarea, Email, Telephone, Postal Code, File Upload, DropDowns, Checkboxes, Hidden, Email Groups)&lt;/li&gt;&lt;li&gt;Custom HTML or text between fields to customize your form, completely!&lt;/li&gt;&lt;li&gt;Unlimited Websites License&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Above all that, Rapid Contact Ex is &lt;strong&gt;one of the cheapest (if not the cheapest) professional contact form generator&lt;/strong&gt;, while it includes all the fancy features you want to create a contact form for your site. With a 30-day money-back guarantee, why not choose it to create your forms?&lt;/p&gt;&lt;br/&gt;&lt;a href=&quot;https://mavxr.com/joomla-extensions/commercial/rapid-contact-ex?utm_campaign=params&amp;utm_source=rapid_contact&quot; target=&quot;_blank&quot;&gt;Learn more!&lt;/a&gt;"/>
       </fieldset>
       <fieldset name="antispam" label="Anti-Spam Options">
-        <field name="enable_anti_spam" type="radio" default="1" label="Anti-spam" class="btn-group" description="Enable this to use the anti-spam question for anti-spam control">
+        <field name="enable_anti_spam" type="radio" default="3" label="Anti-spam" class="btn-group" description="Choose the anti-spam protection method. The Honeypot option adds an invisible field that only bots fill in, requiring nothing from your real visitors.">
             <option value="0">No</option>
             <option value="1">Anti-Spam Question</option>
             <option value="2">Captcha Plugin</option>
+            <option value="3">Honeypot</option>
         </field>
         <field name="anti_spam_q" type="text" default="How many eyes has a typical person?" label="Anti-Spam Question" description="A small text question, preventing you from every automated spam" showon="enable_anti_spam:1"/>
         <field name="anti_spam_a" type="text" default="2" label="Anti-Spam Answer" description="The correct answer to the anti-spam question" showon="enable_anti_spam:1"/>
@@ -64,6 +66,7 @@
             <option value="1">After</option>
         </field>
         <field name="please_complete_captcha_text" type="text" default="Please complete the captcha" label="Please Complete Captcha Text" description="A small text to show when the user has not completed the captcha" showon="enable_anti_spam:2"/>
+        <field name="honeypot_label" type="text" default="Leave this field empty" label="Honeypot Label" description="The label for the honeypot field (hidden from humans but present in the markup for bots)." showon="enable_anti_spam:3"/>
     </fieldset>
     <fieldset name="advanced">
         <field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="If you want to apply a custom style, change this class suffix." />
@@ -74,7 +77,7 @@
         </field>
         <field name="fixed_url_address" type="text" default="" label="Fixed URL Address" description="If fixed url is true, this address is used for Rapid Contact to post itself."/>
   <field name="cache" type="list"
-          default="1" label="Caching"
+          default="0" label="Caching"
     description="Select whether to cache the content of this module">
       <option value="1">Use global</option>
       <option value="0">No caching</option>

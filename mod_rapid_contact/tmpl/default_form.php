@@ -22,28 +22,25 @@ if ($params->get('anti_spam_position', 0) == 0) {
 }
 
 // print email input
-print '<div class="input-group">';
+print '<div class="control-group">';
 $email_placeholder = ($label_pos == '2') ? ' placeholder="'.$params->get('email_label', 'email@site.com').'"' : '';
-if ($label_pos != '2') {
-  print '<label for="'.$form_id.'_email">'.$params->get('email_label', 'email@site.com').'</label>';
-}
-print '<input class="rapid_contact form-control inputbox ' . $email_class . '" type="email" name="rp_email" id="'.$form_id.'_email" size="'.$params->get('email_width', '15').'" value="'.$CORRECT_EMAIL.'" '.$email_placeholder.'/>';
+$email_label_class = ($label_pos == '2') ? ' class="rp-vh"' : '';
+print '<label'.$email_label_class.' for="'.$form_id.'_email">'.$params->get('email_label', 'email@site.com').'</label>';
+print '<input class="rapid_contact form-control inputbox ' . $email_class . '" type="email" name="rp_email" id="'.$form_id.'_email" size="'.$params->get('email_width', '15').'" value="'.htmlspecialchars($CORRECT_EMAIL, ENT_QUOTES, 'UTF-8').'" autocomplete="email" required '.$email_placeholder.'/>';
 print '</div>';
 // print subject input
-print '<div class="input-group">';
+print '<div class="control-group">';
 $subject_placeholder = ($label_pos == '2') ? ' placeholder="'.$params->get('subject_label', 'Subject').'"' : '';
-if ($label_pos != '2') {
-  print '<label for="'.$form_id.'_subject">'.$params->get('subject_label', 'Subject').'</label>';
-}
-print '<input class="rapid_contact form-control inputbox" type="text" name="rp_subject" id="'.$form_id.'_subject" size="'.$params->get('subject_width', '15').'" value="'.$CORRECT_SUBJECT.'" '.$subject_placeholder.'/>';
+$subject_label_class = ($label_pos == '2') ? ' class="rp-vh"' : '';
+print '<label'.$subject_label_class.' for="'.$form_id.'_subject">'.$params->get('subject_label', 'Subject').'</label>';
+print '<input class="rapid_contact form-control inputbox" type="text" name="rp_subject" id="'.$form_id.'_subject" size="'.$params->get('subject_width', '15').'" value="'.htmlspecialchars($CORRECT_SUBJECT, ENT_QUOTES, 'UTF-8').'" '.$subject_placeholder.'/>';
 print '</div>';
 // print message input
-print '<div class="input-group">';
+print '<div class="control-group">';
 $message_placeholder = ($label_pos == '2') ? ' placeholder="'.$params->get('message_label', 'Your Message').'"' : '';
-if ($label_pos != '2') {
-  print '<label for="'.$form_id.'_message">'.$params->get('message_label', 'Your Message').'</label>';
-}
-print '<textarea class="rapid_contact form-control textarea" name="rp_message" id="'.$form_id.'_message" cols="' . $params->get('message_width', '13') . '" rows="4" '.$message_placeholder.'>'.$CORRECT_MESSAGE.'</textarea>';
+$message_label_class = ($label_pos == '2') ? ' class="rp-vh"' : '';
+print '<label'.$message_label_class.' for="'.$form_id.'_message">'.$params->get('message_label', 'Your Message').'</label>';
+print '<textarea class="rapid_contact form-control textarea" name="rp_message" id="'.$form_id.'_message" cols="' . $params->get('message_width', '13') . '" rows="4" '.$message_placeholder.'>'.htmlspecialchars($CORRECT_MESSAGE, ENT_QUOTES, 'UTF-8').'</textarea>';
 print '</div>';
 
 //print anti-spam
